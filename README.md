@@ -1,6 +1,6 @@
 # Labyrinth
 
-A simple Ncurses learning project that draws a labyrinth on the terminal, where you can move around with the player represented by the "*" character
+A simple Ncurses learning project that draws a labyrinth on the terminal where you can move around with the player represented by the "*" character
 
 ## Binds:
 **wasd** - Move your character
