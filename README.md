@@ -4,7 +4,9 @@ A simple Ncurses learning project that draws a labyrinth on the terminal, where 
 
 ## Binds:
 **wasd** - Move your character
+
 **r** - Go to initial position
+
 **q** - Quit game
 
 ## Compile:
