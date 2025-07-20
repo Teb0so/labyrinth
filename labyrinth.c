@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <stdbool.h>
 
 #define ROWS 20
 #define COLS 40
@@ -26,7 +27,7 @@ int map[ROWS][COLS] = {
     {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-int running = 1;
+bool running = true;
 int player_x = 1;
 int player_y = 1;
 
@@ -34,7 +35,7 @@ void input_handler(){
     char ch = getch();
 
     if(ch == 'q'){
-        running = 0;
+        running = false;
     }
     else if(ch == 'r'){
         player_y = 1;
@@ -68,7 +69,7 @@ int main(){
     curs_set(0);
     noecho();
 
-    while(running == 1){
+    while(running == true){
         for(int i = 0; i <= ROWS - 1; i++){
             for(int j = 0; j <= COLS - 1; j++){
                 if (i == player_y && j == player_x){
@@ -86,7 +87,7 @@ int main(){
 
         refresh();
         input_handler();
-        clear();
+        erase();
     }
 
     endwin();
