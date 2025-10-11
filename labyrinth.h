@@ -2,11 +2,16 @@
 #define COLS 40
 
 typedef struct {
-    int map[ROWS][COLS];
-    bool running;
-} Game;
+    int tiles[ROWS][COLS];
+} Map;
 
 typedef struct {
     int x;
     int y;
 } Player;
+
+typedef struct {
+    Map map;
+    Player player;
+    bool running;
+} Game;

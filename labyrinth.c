@@ -1,51 +1,51 @@
 #include <ncurses.h>
 #include <stdbool.h>
+#include <string.h>
 #include "labyrinth.h"
 
-
-void input_handler(Player *p, Game *g){
+void input_handler(Game *g){
     char ch = getch();
 
     if(ch == 'q'){
         g->running = false;
     }
     else if(ch == 'r'){
-        p->y = 1;
-        p->x = 1;
+        g->player.y = 1;
+        g->player.x = 1;
     }
     else if(ch == 'w'){
-        if(g->map[p->y -1 ][p->x] == 0){
-            p->y --;
+        if(g->map.tiles[g->player.y -1 ][g->player.x] == 0){
+            g->player.y --;
         }
     }
     else if(ch == 'a'){
-        if(g->map[p->y][p->x - 1] == 0){
-            p->x --;
+        if(g->map.tiles[g->player.y][g->player.x - 1] == 0){
+            g->player.x --;
         }
     }
     else if(ch == 's'){
-        if(g->map[p->y + 1][p->x] == 0){
-            p->y ++;
+        if(g->map.tiles[g->player.y + 1][g->player.x] == 0){
+            g->player.y ++;
         }
     }
     else if(ch == 'd'){
-        if(g->map[p->y][p->x + 1] == 0){
-            p->x ++;
+        if(g->map.tiles[g->player.y][g->player.x + 1] == 0){
+            g->player.x ++;
         }
     }
 }
 
-void main_loop (Player *p, Game *g){
+void main_loop (Game *g){
     while(g->running == true){
         for(int i = 0; i <= ROWS - 1; i++){
             for(int j = 0; j <= COLS - 1; j++){
-                if (i == p->y && j == p->x){
+                if (i == g->player.y && j == g->player.x){
                     printw("<>");
                 }
-                else if(g->map[i][j] == 0){
+                else if(g->map.tiles[i][j] == 0){
                     printw("  ");
                 }
-                else if(g->map[i][j] == 1){
+                else if(g->map.tiles[i][j] == 1){
                     printw("[]");
                 }
             }
@@ -53,20 +53,13 @@ void main_loop (Player *p, Game *g){
         }
 
         refresh();
-        input_handler(p, g);
+        input_handler(g);
         erase();
     }
 }
 
-int main(void){
-    initscr();
-    raw();
-    curs_set(0);
-    noecho();
-
-Game game = {
-    .running = true,
-    .map = {
+void init_map(Map *m) {
+    int layout[ROWS][COLS] = {
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,1},
         {1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,0,1,0,1,0,1,1},
@@ -87,12 +80,27 @@ Game game = {
         {1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-    }
-};
+    };
+    memcpy(m->tiles, layout, sizeof(layout));
+}
+void init_game(Game *g) {
+    g->running = true;
+    init_map(&g->map);
+    g->player.x = 1;
+    g->player.y = 1;
+}
 
-    Player player = {1, 1};
+int main(void){
+    Game g;
 
-    main_loop(&player, &game);
+    initscr();
+    raw();
+    curs_set(0);
+    noecho();
+
+    init_game(&g);
+
+    main_loop(&g);
 
     endwin();
     return 0;
