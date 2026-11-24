@@ -49,7 +49,7 @@ void main_loop (Game *g){
                     printw("[]");
                 }
             }
-            printw("\n");
+            move(i + 1, 0);
         }
 
         refresh();
